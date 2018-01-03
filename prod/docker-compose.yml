@@ -1,0 +1,21 @@
+version: '3'
+services:
+  redis:
+    image: redis
+  rabbit:
+    image: rabbitmq
+    environment:
+       - RABBITMQ_DEFAULT_USER=guest
+       - RABBITMQ_DEFAULT_PASS=guest
+  web:
+    build: web
+    ports:
+      - "8000:8000"
+    links:
+      - redis
+      - rabbit
+    volumes:
+      - ./web/volumes/data:/code/mybook/data
+      - ./web/volumes/static:/code/mybook/static
+      - ./web/volumes/logs:/code/mybook/logs
+      - ./web/volumes/logs/supervisor:/var/log/supervisor
