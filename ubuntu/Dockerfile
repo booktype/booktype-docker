@@ -7,6 +7,7 @@ RUN groupadd booktype && useradd booktype -g booktype -u 1000
 # install system-wide dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y supervisor \
+    nginx \
     git-core \
     python-dev \
     python-pip \
@@ -18,3 +19,5 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y supervisor \
     php5-cli \
     php5-gd \
     calibre
+
+RUN pip install uwsgi

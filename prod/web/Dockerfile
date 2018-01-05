@@ -1,4 +1,5 @@
 # ubuntu image for booktype
+# https://hub.docker.com/r/ride90/ubuntu-booktype/
 FROM ride90/ubuntu-booktype
 
 # set env vars
@@ -17,11 +18,11 @@ ENV BOOKTYPE_DATABASE_PASSWORD booktype
 # create dir for supervisor logs
 RUN mkdir -p /var/log/supervisor
 
-# copy supervisor configs
-COPY configs/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# create code dir
+# create dir for code
 RUN mkdir -p /code/scripts
+
+# create dir for configs
+RUN mkdir -p /code/configs
 
 # copy shell scripts
 COPY scripts /code/scripts
@@ -49,6 +50,13 @@ RUN chmod ug+x scripts/celery.sh scripts/web.sh scripts/manage_py.sh scripts/wai
 RUN chown -R booktype.booktype /code/ \
     && chmod -R 775 /code/${INSTANCENAME}/logs \
     && chmod -R 775 /code/${INSTANCENAME}/data
+
+# copy configs
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+COPY configs/nginx_booktype.conf /etc/nginx/sites-enabled/
+COPY configs/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY configs/uwsgi.ini /code/configs
+COPY configs/uwsgi_params /code/mybook
 
 EXPOSE 8000
 

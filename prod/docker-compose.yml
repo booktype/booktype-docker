@@ -5,8 +5,8 @@ services:
   rabbit:
     image: rabbitmq
     environment:
-       - RABBITMQ_DEFAULT_USER=guest
-       - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
   db:
     image: postgres
     volumes:
