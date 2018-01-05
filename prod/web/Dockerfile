@@ -3,8 +3,16 @@ FROM ride90/ubuntu-booktype
 
 # set env vars
 ENV INSTANCENAME mybook
+ENV BOOKTYPE_SERVER 127.0.0.1
+ENV BOOKTYPE_URL http://127.0.0.1
 ENV BOOKTYPE_REDIS_HOST redis
 ENV BOOKTYPE_BROKER_URL amqp://guest:guest@rabbit:5672/
+ENV BOOKTYPE_DATABASE_ENGINE django.db.backends.postgresql_psycopg2
+ENV BOOKTYPE_DATABASE_HOST db
+ENV BOOKTYPE_DATABASE_PORT 5432
+ENV BOOKTYPE_DATABASE_NAME booktype
+ENV BOOKTYPE_DATABASE_USER booktype
+ENV BOOKTYPE_DATABASE_PASSWORD booktype
 
 # create dir for supervisor logs
 RUN mkdir -p /var/log/supervisor
@@ -33,13 +41,10 @@ RUN pip install virtualenv \
     && virtualenv venv \
     && . venv/bin/activate \
     && pip install -r Booktype/requirements/prod.txt \
-    && ./Booktype/scripts/createbooktype --database sqlite ${INSTANCENAME}
+    && ./Booktype/scripts/createbooktype --database postgresql ${INSTANCENAME}
 
 # make scripts executable
-RUN chmod ug+x scripts/celery.sh scripts/web.sh scripts/manage_py.sh ${INSTANCENAME}/manage_dev.py
-
-# run manage commands
-RUN ./scripts/manage_py.sh
+RUN chmod ug+x scripts/celery.sh scripts/web.sh scripts/manage_py.sh scripts/wait-for-it.sh ${INSTANCENAME}/manage_prod.py
 
 RUN chown -R booktype.booktype /code/ \
     && chmod -R 775 /code/${INSTANCENAME}/logs \
@@ -47,7 +52,19 @@ RUN chown -R booktype.booktype /code/ \
 
 EXPOSE 8000
 
-# start supervisor
-# - django dev server
-# - celery
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# * wait for db container is ready to accept connection
+#     https://docs.docker.com/compose/startup-order/
+#     https://github.com/vishnubob/wait-for-it
+#     https://github.com/vishnubob/wait-for-it/issues/15
+# * run manage commands
+#     - migrate
+#     - update_permissions
+#     - update_default_roles
+#     - collectstatic
+#     - compress
+#     - create_superuser
+# * run supervisor
+#     - django dev server
+#     - celery
+CMD ./scripts/wait-for-it.sh -t 60 db:5432 -- ./scripts/manage_py.sh \
+    && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

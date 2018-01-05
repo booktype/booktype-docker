@@ -7,15 +7,32 @@ services:
     environment:
        - RABBITMQ_DEFAULT_USER=guest
        - RABBITMQ_DEFAULT_PASS=guest
+  db:
+    image: postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - pg_backups:/pg_backups
+    environment:
+      - POSTGRES_USER=booktype
+      - POSTGRES_PASSWORD=booktype
+      - POSTGRES_DB=booktype
   web:
     build: web
     ports:
       - "8000:8000"
+    depends_on:
+      - redis
+      - rabbit
+      - db
     links:
       - redis
       - rabbit
+      - db
     volumes:
       - ./web/volumes/data:/code/mybook/data
       - ./web/volumes/static:/code/mybook/static
       - ./web/volumes/logs:/code/mybook/logs
       - ./web/volumes/logs/supervisor:/var/log/supervisor
+volumes:
+  pg_data: {}
+  pg_backups: {}
