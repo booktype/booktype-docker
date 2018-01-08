@@ -14,6 +14,8 @@ ENV BOOKTYPE_DATABASE_PORT 5432
 ENV BOOKTYPE_DATABASE_NAME booktype
 ENV BOOKTYPE_DATABASE_USER booktype
 ENV BOOKTYPE_DATABASE_PASSWORD booktype
+ENV BOOKTYPE_PANDOC_PATH /usr/bin/pandoc
+ENV BOOKTYPE_MPDF_DIR /code/mpdf60
 
 # create dir for supervisor logs
 RUN mkdir -p /var/log/supervisor
@@ -34,7 +36,7 @@ WORKDIR /code
 RUN git clone -b BK-2423 https://github.com/ride90/Booktype.git /code/Booktype/
 
 # clone mpdf
-#RUN git clone https://github.com/mpdf/mpdf.git /code/mpdf60/
+RUN git clone https://github.com/mpdf/mpdf.git /code/mpdf60/
 
 # install && create && activate python virtualenv
 # install python dependencies && generate project's skeleton
@@ -72,7 +74,8 @@ EXPOSE 8000
 #     - compress
 #     - create_superuser
 # * run supervisor
-#     - django dev server
+#     - nginx
+#     - uwsgi
 #     - celery
 CMD ./scripts/wait-for-it.sh -t 60 db:5432 -- ./scripts/manage_py.sh \
     && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
