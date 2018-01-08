@@ -18,6 +18,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y supervisor \
     tidy \
     php5-cli \
     php5-gd \
-    calibre
+    calibre \
+    pandoc \
+    nano
 
 RUN pip install uwsgi

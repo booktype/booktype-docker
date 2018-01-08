@@ -33,6 +33,7 @@ services:
       - ./web/volumes/static:/code/mybook/static
       - ./web/volumes/logs:/code/mybook/logs
       - ./web/volumes/logs/supervisor:/var/log/supervisor
+      - ./web/volumes/logs/nginx:/var/log/nginx
 volumes:
   pg_data: {}
   pg_backups: {}
