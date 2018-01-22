@@ -33,7 +33,7 @@ COPY scripts /code/scripts
 WORKDIR /code
 
 # clone project
-RUN git clone -b BK-2423 https://github.com/ride90/Booktype.git /code/Booktype/
+RUN git clone https://github.com/booktype/Booktype.git /code/Booktype/
 
 # clone mpdf
 RUN git clone https://github.com/mpdf/mpdf.git /code/mpdf60/
