@@ -19,7 +19,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y supervisor \
     php5-cli \
     php5-gd \
     calibre \
-    nano
+    nano \
+    zip \
+    unzip
 
 ADD https://github.com/jgm/pandoc/releases/download/1.19.2.1/pandoc-1.19.2.1-1-amd64.deb /home/
 RUN dpkg -i /home/pandoc-1.19.2.1-1-amd64.deb
