@@ -1,7 +1,7 @@
 # booktype-docker
 Dockerized booktype
 
-##Table of contents
+## Table of contents ##
 - About
 - Installation
 - Usage
