@@ -29,11 +29,11 @@ services:
       - rabbit
       - db
     volumes:
-      - ./web/volumes/data:/code/mybook/data
-      - ./web/volumes/static:/code/mybook/static
-      - ./web/volumes/logs:/code/mybook/logs
-      - ./web/volumes/logs/supervisor:/var/log/supervisor
-      - ./web/volumes/logs/nginx:/var/log/nginx
+      - ./web/volumes/data:/code/mybook/data:rw
+      - ./web/volumes/static:/code/mybook/static:rw
+      - ./web/volumes/logs:/code/mybook/logs:rw
+      - ./web/volumes/logs/supervisor:/var/log/supervisor:rw
+      - ./web/volumes/logs/nginx:/var/log/nginx:rw
 volumes:
   pg_data: {}
   pg_backups: {}
