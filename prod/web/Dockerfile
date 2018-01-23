@@ -36,7 +36,7 @@ WORKDIR /code
 RUN git clone https://github.com/booktype/Booktype.git /code/Booktype/
 
 # clone mpdf
-RUN git clone https://github.com/mpdf/mpdf.git /code/mpdf60/
+RUN git clone https://github.com/booktype/mpdf.git /code/mpdf60/
 
 # install && create && activate python virtualenv
 # install python dependencies && generate project's skeleton
