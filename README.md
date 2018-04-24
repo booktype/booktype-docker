@@ -39,8 +39,7 @@ Here are some usefull commands you may use:
 
 ### Deploy on the server ###
 Current docker installation is not tested on the server and may not be stable. 
-If you need to deploy booktype on the server, 
-check this link https://wiki.sourcefabric.org/display/Booktype/Installing or contact https://booktype.pro
+If you need to deploy booktype on a server, please read the [deployment guide](http://booktype.readthedocs.io/en/latest/deployment/) or email contact@booktype.pro for assistance.
 
 ### Need support? ###
 Check our [support forum](https://forum.sourcefabric.org/categories/booktype-support)
